@@ -1,0 +1,67 @@
+<div class="app-shell">
+  <aside class="sidebar">
+    <a routerLink="/inicio" class="brand">
+      <span class="brand-icon">G</span>
+      <span>
+        <strong>Gestión</strong>
+        <small>ACADÉMICA</small>
+      </span>
+    </a>
+
+    <div class="menu-label">MENÚ PRINCIPAL</div>
+
+    <nav class="navigation">
+      <a routerLink="/inicio"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }">
+        <span class="nav-icon">⌂</span>
+        Inicio
+      </a>
+
+      <a routerLink="/alumnos" routerLinkActive="active">
+        <span class="nav-icon">♙</span>
+        Alumnos
+      </a>
+
+      <a routerLink="/cursos" routerLinkActive="active">
+        <span class="nav-icon">▤</span>
+        Cursos
+      </a>
+
+      <a routerLink="/docentes" routerLinkActive="active">
+        <span class="nav-icon">♧</span>
+        Docentes
+      </a>
+
+      <a routerLink="/matriculas" routerLinkActive="active">
+        <span class="nav-icon">▣</span>
+        Matrículas
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="profile-avatar">AD</div>
+      <div>
+        <strong>Administrador</strong>
+        <small>Sistema académico</small>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main-area">
+    <header class="topbar">
+      <div>
+        <span class="topbar-label">PLATAFORMA ACADÉMICA</span>
+        <strong>Panel de administración</strong>
+      </div>
+      <div class="status">
+        <span class="status-dot"></span>
+        Sistema activo
+      </div>
+    </header>
+
+    <section class="page-content">
+      <router-outlet />
+    </section>
+  </main>
+</div>

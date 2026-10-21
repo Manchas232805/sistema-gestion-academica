@@ -1,0 +1,200 @@
+
+<section class="page">
+  <header class="page-header">
+    <div>
+      <span class="eyebrow">GESTIÓN ACADÉMICA</span>
+      <h1>Alumnos</h1>
+      <p>Administra los registros de estudiantes de la institución.</p>
+    </div>
+
+    <button class="primary-btn" type="button" (click)="abrirNuevo()">
+      <span>＋</span> Nuevo alumno
+    </button>
+  </header>
+
+<div class="notice success" *ngIf="mensaje && !mostrarFormulario">
+  {{ mensaje }}
+</div>
+
+<div class="notice error" *ngIf="error && !mostrarFormulario">
+  {{ error }}
+</div>
+
+  <section class="summary">
+    <div class="summary-icon">♙</div>
+    <div>
+      <span>Total de alumnos registrados</span>
+      <strong>{{ alumnos.length }}</strong>
+    </div>
+    <div class="summary-caption">Información de la base de datos</div>
+  </section>
+
+  <section class="table-card">
+    <div class="table-header">
+      <div>
+        <h2>Directorio de alumnos</h2>
+        <p>Consulta y administra los estudiantes registrados.</p>
+      </div>
+
+      <input
+        class="search"
+        type="search"
+        placeholder="Buscar alumno..."
+        [(ngModel)]="busqueda"
+        aria-label="Buscar alumnos"
+      />
+    </div>
+
+    <div class="loading" *ngIf="cargando">Cargando alumnos...</div>
+
+    <div class="table-scroll" *ngIf="!cargando">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Alumno</th>
+            <th>Correo electrónico</th>
+            <th>Teléfono</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let alumno of alumnosFiltrados">
+            <td>#{{ alumno.id }}</td>
+            <td>
+              <div class="student">
+                <div class="avatar">
+                  {{ alumno.nombres.charAt(0) }}{{ alumno.apellidos.charAt(0) }}
+                </div>
+                <div>
+                  <strong>{{ alumno.nombres }} {{ alumno.apellidos }}</strong>
+                  <small>Estudiante</small>
+                </div>
+              </div>
+            </td>
+            <td>{{ alumno.correo || '—' }}</td>
+            <td>{{ alumno.telefono || '—' }}</td>
+            <td>
+              <div class="actions">
+                <button class="edit-btn" type="button"
+                  (click)="abrirEdicion(alumno)">Editar</button>
+                <button class="delete-btn" type="button"
+                  (click)="eliminar(alumno)">Eliminar</button>
+              </div>
+            </td>
+          </tr>
+
+          <tr *ngIf="alumnosFiltrados.length === 0">
+            <td colspan="5" class="empty">
+              {{ busqueda ? 'No se encontraron coincidencias.' : 'Todavía no hay alumnos registrados.' }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <div class="modal-backdrop" *ngIf="mostrarFormulario"
+       (click)="cancelar()">
+    <section class="modal" role="dialog" aria-modal="true"
+             aria-labelledby="form-title" (click)="$event.stopPropagation()">
+      <header class="modal-header">
+        <div>
+          <span class="eyebrow">REGISTRO ACADÉMICO</span>
+          <h2 id="form-title">
+            {{ editando ? 'Editar alumno' : 'Registrar alumno' }}
+          </h2>
+        </div>
+        <button type="button" class="close-btn"
+                (click)="cancelar()" aria-label="Cerrar">×</button>
+      </header>
+
+
+<form #alumnoForm="ngForm" (ngSubmit)="guardar()">
+  <div class="form-error" *ngIf="error" role="alert">
+  {{ error }}
+</div>
+
+  <label for="nombres">Nombres *</label>
+  <input
+    id="nombres"
+    name="nombres"
+    [(ngModel)]="formulario.nombres"
+    #nombres="ngModel"
+    required
+    maxlength="100"
+    placeholder="Ej. María Fernanda"
+  />
+  <small class="field-error"
+    *ngIf="nombres.invalid && nombres.touched">
+    Ingresa los nombres (máximo 100 caracteres).
+  </small>
+
+  <label for="apellidos">Apellidos *</label>
+  <input
+    id="apellidos"
+    name="apellidos"
+    [(ngModel)]="formulario.apellidos"
+    #apellidos="ngModel"
+    required
+    maxlength="100"
+    placeholder="Ej. García López"
+  />
+  <small class="field-error"
+    *ngIf="apellidos.invalid && apellidos.touched">
+    Ingresa los apellidos (máximo 100 caracteres).
+  </small>
+
+  <label for="correo">Correo electrónico</label>
+  <input
+    id="correo"
+    name="correo"
+    type="email"
+    [(ngModel)]="formulario.correo"
+    #correo="ngModel"
+    maxlength="150"
+    placeholder="alumno@correo.com"
+  />
+  <small class="field-error"
+    *ngIf="correo.invalid && correo.touched">
+    Introduce un correo electrónico válido.
+  </small>
+
+  <label for="telefono">Teléfono</label>
+  <input
+    id="telefono"
+    name="telefono"
+    type="tel"
+    [(ngModel)]="formulario.telefono"
+    #telefono="ngModel"
+    maxlength="20"
+    pattern="[0-9+() -]*"
+    placeholder="Ej. 987654321"
+  />
+  <small class="field-error"
+    *ngIf="telefono.invalid && telefono.touched">
+    Utiliza números, espacios o los símbolos +, - y paréntesis.
+  </small>
+
+  <div class="form-actions">
+    <button
+      type="button"
+      class="secondary-btn"
+      (click)="cancelar()">
+      Cancelar
+    </button>
+
+    <button
+      type="submit"
+      class="primary-btn"
+      [disabled]="alumnoForm.invalid || cargando">
+      {{ editando ? 'Guardar cambios' : 'Registrar alumno' }}
+    </button>
+  </div>
+
+</form>
+
+    </section>
+  </div>
+</section>
