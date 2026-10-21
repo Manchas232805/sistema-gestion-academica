@@ -1,0 +1,50 @@
+
+package com.reinodeloscielos.backend.controller;
+
+import com.reinodeloscielos.backend.entity.Alumno;
+import com.reinodeloscielos.backend.service.AlumnoService;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/alumnos")
+@CrossOrigin(origins = "http://localhost:4200")
+public class AlumnoController {
+
+    private final AlumnoService alumnoService;
+
+    public AlumnoController(AlumnoService alumnoService) {
+        this.alumnoService = alumnoService;
+    }
+
+    @GetMapping
+    public List<Alumno> listar() {
+        return alumnoService.listar();
+    }
+
+    @GetMapping("/{id}")
+    public Alumno buscarPorId(@PathVariable Long id) {
+        return alumnoService.buscarPorId(id);
+    }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public Alumno crear(@RequestBody Alumno alumno) {
+        return alumnoService.crear(alumno);
+    }
+
+    @PutMapping("/{id}")
+    public Alumno actualizar(
+            @PathVariable Long id,
+            @RequestBody Alumno alumno) {
+        return alumnoService.actualizar(id, alumno);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void eliminar(@PathVariable Long id) {
+        alumnoService.eliminar(id);
+    }
+}

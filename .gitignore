@@ -1,0 +1,18 @@
+
+# Angular
+frontend/node_modules/
+frontend/dist/
+frontend/.angular/
+
+# Maven y Java
+backend/target/
+
+# Variables de entorno y credenciales locales
+.env
+.env.*
+!.env.example
+**/application-local.properties
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
