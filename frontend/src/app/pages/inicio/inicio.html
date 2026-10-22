@@ -1,8 +1,122 @@
+
 <div class="welcome">
-  <span class="eyebrow">RESUMEN GENERAL</span>
+  <div class="welcome-heading">
+    <span class="eyebrow">RESUMEN GENERAL</span>
+    <span class="welcome-badge">
+      <span class="welcome-badge-dot"></span>
+    </span>
+  </div>
+
   <h1>¡Bienvenido al sistema académico!</h1>
-  <p>Administra la información académica de tu institución desde un solo lugar.</p>
+
+  <p>
+    Administra la información académica de tu institución
+    desde un solo lugar.
+  </p>
 </div>
+
+
+<section class="stats-grid" aria-label="Estadísticas del sistema">
+  <article class="stat-card">
+    <div class="stat-icon blue">♙</div>
+    <div class="stat-info">
+      <span>Total de alumnos</span>
+
+      @if (cargandoAlumnos) {
+        <strong class="stat-value">...</strong>
+      } @else if (errorAlumnos) {
+        <strong class="stat-value">—</strong>
+        <small>No se pudo cargar</small>
+      } @else {
+        <strong class="stat-value">{{ alumnos.length }}</strong>
+        <small>Alumnos registrados</small>
+      }
+    </div>
+  </article>
+
+  <article class="stat-card">
+    <div class="stat-icon purple">♧</div>
+    <div class="stat-info">
+      <span>Total de docentes</span>
+      <strong class="stat-value">—</strong>
+      <small>Módulo pendiente</small>
+    </div>
+  </article>
+
+  <article class="stat-card">
+    <div class="stat-icon green">▤</div>
+    <div class="stat-info">
+      <span>Total de cursos</span>
+      <strong class="stat-value">—</strong>
+      <small>Módulo pendiente</small>
+    </div>
+  </article>
+
+  <article class="stat-card">
+    <div class="stat-icon orange">▣</div>
+    <div class="stat-info">
+      <span>Total de matrículas</span>
+      <strong class="stat-value">—</strong>
+      <small>Módulo pendiente</small>
+    </div>
+  </article>
+</section>
+
+
+<section class="activity-section">
+  <div class="activity-heading">
+    <div>
+      <h2>Actividad reciente</h2>
+      <p>Consulta los últimos alumnos de la lista.</p>
+    </div>
+
+    <a routerLink="/alumnos" class="activity-link">
+      Ver todos →
+    </a>
+  </div>
+
+  @if (cargandoAlumnos) {
+    <div class="activity-state">
+      Cargando alumnos...
+    </div>
+  } @else if (errorAlumnos) {
+    <div class="activity-state">
+      No se pudo cargar la actividad. Inténtalo nuevamente más tarde.
+    </div>
+  } @else if (alumnosRecientes.length === 0) {
+    <div class="activity-state">
+      <span class="empty-icon">♙</span>
+      <strong>Aún no hay alumnos registrados</strong>
+      <p>Cuando registres alumnos, aparecerán aquí.</p>
+      <a routerLink="/alumnos">Ir a gestión de alumnos</a>
+    </div>
+  } @else {
+    <div class="activity-list">
+      @for (alumno of alumnosRecientes; track alumno.id ?? alumno.correo) {
+        <article class="activity-item">
+          <div class="activity-avatar">
+            {{ alumno.nombres.charAt(0) }}{{ alumno.apellidos.charAt(0) }}
+          </div>
+
+          <div class="activity-person">
+            <strong>{{ alumno.nombres }} {{ alumno.apellidos }}</strong>
+            <span>{{ alumno.correo }}</span>
+          </div>
+
+          <a
+            class="activity-view"
+            routerLink="/alumnos"
+            aria-label="Ver módulo de alumnos"
+          >
+            Ver alumnos →
+          </a>
+        </article>
+      }
+    </div>
+  }
+</section>
+
+
 
 <div class="welcome-card">
   <div class="welcome-icon">✦</div>

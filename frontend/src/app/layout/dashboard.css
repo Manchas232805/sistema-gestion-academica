@@ -239,3 +239,206 @@
     padding: 16px 10px;
   }
 }
+
+.sidebar {
+  box-shadow: 6px 0 24px rgba(17, 34, 67, 0.08);
+}
+
+.brand-icon {
+  box-shadow: 0 5px 14px rgba(71, 117, 232, 0.3);
+  transition: transform 0.2s ease;
+}
+
+.brand:hover .brand-icon {
+  transform: rotate(-5deg) scale(1.05);
+}
+
+.navigation a {
+  position: relative;
+  min-height: 46px;
+}
+
+.navigation a.active {
+  background: linear-gradient(110deg, #416fe0, #3459bb);
+  box-shadow: 0 5px 14px rgba(16, 27, 53, 0.18);
+}
+
+.navigation a.active::before {
+  content: "";
+  position: absolute;
+  left: -18px;
+  top: 10px;
+  bottom: 10px;
+  width: 3px;
+  border-radius: 0 4px 4px 0;
+  background: #a9c5ff;
+}
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  box-shadow: 0 3px 12px rgba(24, 43, 75, 0.025);
+}
+
+.status {
+  white-space: nowrap;
+}
+
+.status-dot {
+  box-shadow: 0 0 0 4px rgba(45, 165, 102, 0.1);
+}
+
+.page-content {
+  width: 100%;
+  max-width: 1500px;
+  margin: 0 auto;
+}
+
+.quick-card,
+.welcome-card {
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+}
+
+a.quick-card:focus-visible,
+.navigation a:focus-visible,
+.brand:focus-visible {
+  outline: 3px solid #8eafff;
+  outline-offset: 3px;
+}
+
+@media (max-width: 760px) {
+  .navigation a.active::before {
+    left: -9px;
+  }
+
+  .topbar {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .status {
+    padding: 7px 10px;
+    font-size: 10px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .navigation a,
+  .brand-icon,
+  .quick-card,
+  .welcome-card {
+    transition: none;
+  }
+}
+
+.menu-toggle {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border: 1px solid #e2e8f2;
+  border-radius: 10px;
+  background: #fff;
+  color: #24395e;
+  font-size: 21px;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.menu-toggle:hover {
+  background: #edf3ff;
+  border-color: #cbd9fb;
+}
+
+.topbar {
+  justify-content: flex-start;
+}
+
+.topbar > div:first-of-type {
+  flex: 1;
+}
+
+@media (min-width: 761px) {
+  .sidebar {
+    transition: width 0.25s ease, padding 0.25s ease;
+  }
+
+  .main-area {
+    transition: margin-left 0.25s ease;
+  }
+
+  .app-shell.menu-collapsed .sidebar {
+    width: 76px;
+    padding-right: 9px;
+    padding-left: 9px;
+  }
+
+  .app-shell.menu-collapsed .brand {
+    justify-content: center;
+    padding-right: 0;
+    padding-left: 0;
+  }
+
+
+.app-shell.menu-collapsed .brand {
+  justify-content: center;
+  gap: 0;
+  padding-right: 0;
+  padding-left: 0;
+}
+
+.app-shell.menu-collapsed .brand > span:last-child,
+.app-shell.menu-collapsed .menu-label {
+  display: none;
+}
+
+.app-shell.menu-collapsed .brand-icon {
+  flex-shrink: 0;
+}
+
+.app-shell.menu-collapsed .navigation a {
+  justify-content: center;
+  gap: 0;
+  padding-right: 8px;
+  padding-left: 8px;
+  font-size: 0;
+}
+
+
+  .app-shell.menu-collapsed .navigation a {
+    justify-content: center;
+    padding-right: 8px;
+    padding-left: 8px;
+  }
+
+  .app-shell.menu-collapsed .nav-icon {
+    font-size: 20px;
+  }
+
+  .app-shell.menu-collapsed .sidebar-footer {
+    justify-content: center;
+  }
+
+  .app-shell.menu-collapsed .sidebar-footer > div:last-child {
+    display: none;
+  }
+
+  .app-shell.menu-collapsed .main-area {
+    margin-left: 76px;
+  }
+}
+
+/* En móviles, conservar el menú compacto */
+
+@media (max-width: 760px) {
+  .menu-toggle {
+    width: 36px;
+    height: 36px;
+  }
+}
+

@@ -1,5 +1,9 @@
 import { Component } from '@angular/core';
-import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import {
+  RouterLink,
+  RouterLinkActive,
+  RouterOutlet
+} from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
@@ -8,4 +12,10 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css'
 })
-export class Dashboard {}
+export class Dashboard {
+  menuCollapsed = false;
+
+  toggleMenu(): void {
+    this.menuCollapsed = !this.menuCollapsed;
+  }
+}

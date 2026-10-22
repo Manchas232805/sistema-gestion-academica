@@ -1,4 +1,4 @@
-<div class="app-shell">
+<div class="app-shell" [class.menu-collapsed]="menuCollapsed">
   <aside class="sidebar">
     <a routerLink="/inicio" class="brand">
       <span class="brand-icon">G</span>
@@ -50,6 +50,15 @@
 
   <main class="main-area">
     <header class="topbar">
+      <button
+        class="menu-toggle"
+        type="button"
+        (click)="toggleMenu()"
+        [attr.aria-expanded]="!menuCollapsed"
+        aria-label="Contraer o expandir el menú"
+        >
+      ☰
+      </button>
       <div>
         <span class="topbar-label">PLATAFORMA ACADÉMICA</span>
         <strong>Panel de administración</strong>
