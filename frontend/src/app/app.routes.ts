@@ -1,8 +1,8 @@
-
 import { Routes } from '@angular/router';
 import { Dashboard } from './layout/dashboard';
 import { Inicio } from './pages/inicio/inicio';
 import { Alumnos } from './pages/alumnos/alumnos';
+import { Docentes } from './pages/docentes/docentes';
 
 export const routes: Routes = [
   {
@@ -21,6 +21,10 @@ export const routes: Routes = [
       {
         path: 'alumnos',
         component: Alumnos
+      },
+      {
+        path: 'docentes',
+        component: Docentes
       }
     ]
   },
@@ -29,4 +33,3 @@ export const routes: Routes = [
     redirectTo: 'inicio'
   }
 ];
-

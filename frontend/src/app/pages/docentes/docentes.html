@@ -1,0 +1,350 @@
+<div class="docentes-page">
+
+  <div class="page-header">
+    <div>
+      <span class="eyebrow">GESTIÓN ACADÉMICA</span>
+      <h1>Gestión de docentes</h1>
+      <p>Administra la información de los docentes de la institución.</p>
+    </div>
+
+    <button class="btn-primary" type="button" (click)="abrirNuevo()">
+      + Nuevo docente
+    </button>
+  </div>
+
+  <div class="stats-card">
+    <div class="stats-icon">👨‍🏫</div>
+    <div>
+      <p>Total de docentes</p>
+      <h2>{{ docentes.length }}</h2>
+    </div>
+  </div>
+
+  <div class="content-card">
+
+    <div class="toolbar">
+      <div>
+        <h2>Lista de docentes</h2>
+        <p>Consulta y administra los docentes registrados.</p>
+      </div>
+
+      <input
+        type="search"
+        class="search-input"
+        placeholder="Buscar por nombre, correo o especialidad..."
+        [(ngModel)]="busqueda"
+        aria-label="Buscar docentes"
+      />
+    </div>
+
+    <div *ngIf="mensaje" class="alert alert-success" role="status">
+      {{ mensaje }}
+    </div>
+
+    <div *ngIf="error" class="alert alert-error" role="alert">
+      {{ error }}
+    </div>
+
+    <div *ngIf="cargando" class="empty-state">
+      Cargando docentes...
+    </div>
+
+    <div class="table-container" *ngIf="!cargando">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Docente</th>
+            <th>Correo electrónico</th>
+            <th>Teléfono</th>
+            <th>Especialidad</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let docente of docentesFiltrados">
+            <td>{{ docente.id }}</td>
+
+            <td>
+              <div class="teacher-name">
+                <div class="avatar">
+                  {{ docente.nombres.charAt(0) }}{{ docente.apellidos.charAt(0) }}
+                </div>
+                <strong>{{ docente.nombres }} {{ docente.apellidos }}</strong>
+              </div>
+            </td>
+
+            <td>{{ docente.correo }}</td>
+            <td>{{ docente.telefono }}</td>
+            <td>
+              <span class="specialty-badge">
+                {{ docente.especialidad }}
+              </span>
+            </td>
+
+            <td>
+              <div class="actions">
+                <button
+                  type="button"
+                  class="btn-edit"
+                  (click)="abrirEdicion(docente)"
+                >
+                  Editar
+                </button>
+
+                <button
+                  type="button"
+                  class="btn-delete"
+                  (click)="eliminar(docente)"
+                >
+                  Eliminar
+                </button>
+              </div>
+            </td>
+          </tr>
+
+          <tr *ngIf="docentesFiltrados.length === 0">
+            <td colspan="6" class="empty-state">
+              {{ busqueda ? 'No se encontraron docentes.' : 'Todavía no hay docentes registrados.' }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+  <div class="modal-backdrop" *ngIf="mostrarFormulario">
+    <div class="modal-card">
+
+      <div class="modal-header">
+        <div>
+          <h2>{{ editando ? 'Editar docente' : 'Registrar docente' }}</h2>
+          <p>Completa la información solicitada.</p>
+        </div>
+
+        <button
+          type="button"
+          class="btn-close"
+          (click)="cancelar()"
+          aria-label="Cerrar formulario"
+        >
+          ×
+        </button>
+      </div>
+
+      <form #formDocente="ngForm" (ngSubmit)="guardar()">
+
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="nombres">Nombres *</label>
+            <input
+            id="nombres"
+            name="nombres"
+            type="text"
+            [(ngModel)]="formulario.nombres"
+            required
+            minlength="2"
+            maxlength="100"
+            pattern=".*\S.*"
+            #nombres="ngModel"
+            placeholder="Ej. Juan Carlos"
+            />
+
+            <div
+            class="field-error"
+            *ngIf="nombres.invalid && nombres.touched"
+            >
+  <span *ngIf="nombres.errors?.['required'] || nombres.errors?.['pattern']">
+    El nombre es obligatorio y no puede contener solo espacios.
+  </span>
+  <span *ngIf="nombres.errors?.['minlength']">
+    Escribe al menos 2 caracteres.
+  </span>
+</div>
+
+          </div>
+
+          <div class="form-group">
+            <label for="apellidos">Apellidos *</label>
+            <input
+            id="apellidos"
+            name="apellidos"
+            type="text"
+            [(ngModel)]="formulario.apellidos"
+            required
+            minlength="2"
+            maxlength="100"
+            pattern=".*\S.*"
+            #apellidos="ngModel"
+            placeholder="Ej. Pérez García"
+            />
+
+          <div
+            class="field-error"
+            *ngIf="apellidos.invalid && apellidos.touched"
+          >
+            <span *ngIf="apellidos.errors?.['required'] || apellidos.errors?.['pattern']">
+              Los apellidos son obligatorios y no pueden contener solo espacios.
+            </span>
+            <span *ngIf="apellidos.errors?.['minlength']">
+              Escribe al menos 2 caracteres.
+            </span>
+          </div>
+
+          </div>
+
+          <div class="form-group">
+            <label for="correo">Correo electrónico *</label>
+            <input
+            id="correo"
+            name="correo"
+            type="email"
+            [(ngModel)]="formulario.correo"
+            required
+            email
+            maxlength="150"
+            #correo="ngModel"
+            placeholder="docente@institucion.edu"
+            />
+
+          <div
+          class="field-error"
+          *ngIf="correo.invalid && correo.touched"
+          >
+          <span *ngIf="correo.errors?.['required']">
+            El correo electrónico es obligatorio.
+          </span>
+
+          <span *ngIf="correo.errors?.['email'] || correo.errors?.['pattern']">
+            Ingresa un correo electrónico válido.
+          </span>
+          </div>
+
+          </div>
+
+          <div class="form-group">
+            <label for="telefono">Teléfono *</label>
+            <input
+            id="telefono"
+            name="telefono"
+            type="tel"
+            [(ngModel)]="formulario.telefono"
+            required
+            minlength="9"
+            maxlength="9"
+            pattern="[0-9]{9}"
+            #telefono="ngModel"
+            placeholder="Ej. 987654321"
+          />
+
+          <div
+            class="field-error"
+            *ngIf="telefono.invalid && telefono.touched"
+          >
+            <span *ngIf="telefono.errors?.['required']">
+              El teléfono es obligatorio.
+            </span>
+
+            <span *ngIf="telefono.errors?.['pattern']">
+              Ingresa exactamente 9 dígitos numéricos.
+            </span>
+          </div>
+
+          </div>
+
+          <div class="form-group full-width">
+            <label for="especialidad">Especialidad *</label>
+            <input
+            id="especialidad"
+            name="especialidad"
+            type="text"
+            [(ngModel)]="formulario.especialidad"
+            required
+            minlength="2"
+            maxlength="100"
+            pattern=".*\S.*"
+            #especialidad="ngModel"
+            placeholder="Ej. Ingeniería de Sistemas"
+            />
+
+          <div
+            class="field-error"
+            *ngIf="especialidad.invalid && especialidad.touched"
+          >
+            <span *ngIf="especialidad.errors?.['required'] || especialidad.errors?.['pattern']">
+              La especialidad es obligatoria y no puede contener solo espacios.
+            </span>
+
+            <span *ngIf="especialidad.errors?.['minlength']">
+              Escribe al menos 2 caracteres.
+            </span>
+          </div>
+
+          </div>
+        </div>
+
+        <div *ngIf="error" class="alert alert-error" role="alert">
+          {{ error }}
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn-secondary" (click)="cancelar()">
+            Cancelar
+          </button>
+
+          <button
+            type="submit"
+            class="btn-primary"
+            [disabled]="formDocente.invalid"
+          >
+            {{ editando ? 'Guardar cambios' : 'Registrar docente' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+<div class="modal-backdrop" *ngIf="mostrarConfirmacionEliminar">
+  <div
+    class="confirm-modal"
+    role="alertdialog"
+    aria-modal="true"
+    aria-labelledby="confirm-title"
+    aria-describedby="confirm-description"
+  >
+    <div class="confirm-icon">!</div>
+
+    <h2 id="confirm-title">¿Eliminar docente?</h2>
+
+    <p id="confirm-description">
+      ¿Estás seguro de que deseas eliminar a
+      <strong>
+        {{ docentePendienteEliminar?.nombres }}
+        {{ docentePendienteEliminar?.apellidos }}
+      </strong>?
+      Esta acción no se puede deshacer.
+    </p>
+
+    <div class="confirm-actions">
+      <button
+        type="button"
+        class="btn-secondary"
+        (click)="cancelarEliminacion()"
+      >
+        Cancelar
+      </button>
+
+      <button
+        type="button"
+        class="btn-confirm-delete"
+        (click)="confirmarEliminacion()"
+      >
+        Sí, eliminar
+      </button>
+    </div>
+  </div>
+</div>
+
+</div>
