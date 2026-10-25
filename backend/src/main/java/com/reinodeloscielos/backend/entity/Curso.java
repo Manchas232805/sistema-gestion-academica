@@ -1,4 +1,4 @@
-package com.reinodeloscelos.backend.entity;
+package com.reinodeloscielos.backend.entity;
 
 import jakarta.persistence.*;
 
