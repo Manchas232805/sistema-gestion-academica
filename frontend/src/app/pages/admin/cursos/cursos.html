@@ -1,0 +1,159 @@
+<div class="container mt-4">
+
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Gestión de Cursos</h2>
+
+    <button
+      class="btn"
+      [ngClass]="mostrarFormulario ? 'btn-secondary' : 'btn-primary'"
+      (click)="toggleFormulario()">
+
+      {{ mostrarFormulario ? 'Cancelar' : 'Nuevo Curso' }}
+
+    </button>
+  </div>
+
+
+  @if (mostrarFormulario) {
+
+    <div class="card mb-4 shadow-sm border-primary">
+
+      <div class="card-body">
+
+        <div class="row g-3">
+
+          <div class="col-md-5">
+
+            <label class="form-label">
+              Nombre del Curso
+            </label>
+
+            <input
+              type="text"
+              class="form-control"
+              [(ngModel)]="cursoTemp.nombre">
+
+          </div>
+
+
+          <div class="col-md-5">
+
+            <label class="form-label">
+              Docente Asignado
+            </label>
+
+            <select
+              class="form-select"
+              [(ngModel)]="cursoTemp.idDocente">
+
+              <option [ngValue]="null">
+                Seleccione un docente...
+              </option>
+
+              @for (docente of docentes; track docente.id) {
+
+                <option [ngValue]="docente.id">
+                  {{ docente.nombres }} {{ docente.apellidos }}
+                </option>
+
+              }
+
+            </select>
+
+          </div>
+
+
+          <div class="col-md-2 d-flex align-items-end">
+
+            <button
+              class="btn btn-success w-100"
+              (click)="guardarCurso()">
+
+              {{ idEditando ? 'Actualizar' : 'Guardar' }}
+
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  }
+
+
+  <div class="card shadow-sm">
+
+    <div class="card-body">
+
+      <table class="table table-hover table-sm">
+
+        <thead class="table-dark">
+
+          <tr>
+            <th>ID</th>
+            <th>Nombre del Curso</th>
+            <th>Docente Responsable</th>
+            <th>Acciones</th>
+          </tr>
+
+        </thead>
+
+
+        <tbody>
+
+          @for (curso of cursos; track curso.id) {
+
+            <tr>
+
+              <td>
+                {{ curso.id }}
+              </td>
+
+              <td>
+                {{ curso.nombre }}
+              </td>
+
+              <td>
+
+                <span [class.text-muted]="!curso.idDocente">
+                  {{ obtenerNombreDocente(curso.idDocente) }}
+                </span>
+
+              </td>
+
+              <td>
+
+                <button
+                  class="btn btn-sm btn-warning me-2"
+                  (click)="editarCurso(curso)">
+
+                  Editar
+
+                </button>
+
+                <button
+                  class="btn btn-sm btn-danger"
+                  (click)="eliminarCurso(curso.id)">
+
+                  Eliminar
+
+                </button>
+
+              </td>
+
+            </tr>
+
+          }
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+</div>
