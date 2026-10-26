@@ -56,8 +56,14 @@
     <div class="stat-icon orange">▣</div>
     <div class="stat-info">
       <span>Total de matrículas</span>
-      <strong class="stat-value">—</strong>
-      <small>Módulo pendiente</small>
+      @if (cargandoMatriculas) {
+        <strong class="stat-value">...</strong>
+      } @else if (errorMatriculas) {
+        <strong class="stat-value">—</strong><small>No se pudo cargar</small>
+      } @else {
+        <strong class="stat-value">{{ totalMatriculas }}</strong>
+        <small>Incluye activas y canceladas</small>
+      }
     </div>
   </article>
 </section>
@@ -154,10 +160,10 @@
     <span class="coming-soon">Próximamente</span>
   </div>
 
-  <div class="quick-card upcoming">
+  <a class="quick-card" routerLink="/matriculas">
     <span class="quick-icon orange">▣</span>
     <strong>Matrículas</strong>
     <small>Seguimiento de matrículas académicas.</small>
-    <span class="coming-soon">Próximamente</span>
-  </div>
+    <span class="card-link">Abrir módulo →</span>
+  </a>
 </div>
