@@ -197,4 +197,42 @@
 
     </section>
   </div>
+
+
+<div class="modal-overlay" *ngIf="mostrarConfirmacionEliminar">
+  <div class="modal-confirmacion">
+    <div class="modal-icono">!</div>
+
+    <h2>¿Eliminar alumno?</h2>
+
+    <p>
+      ¿Deseas eliminar a
+      <strong>
+        {{ alumnoPendienteEliminar?.nombres }}
+        {{ alumnoPendienteEliminar?.apellidos }}
+      </strong>?
+    </p>
+
+    <p class="modal-aviso">
+      Esta acción no se puede deshacer.
+    </p>
+
+    <div class="modal-acciones">
+      <button
+        type="button"
+        class="btn-cancelar"
+        (click)="cancelarEliminacion()">
+        Cancelar
+      </button>
+
+      <button
+        type="button"
+        class="btn-eliminar"
+        (click)="confirmarEliminacion()">
+        Sí, eliminar
+      </button>
+    </div>
+  </div>
+</div>
+
 </section>

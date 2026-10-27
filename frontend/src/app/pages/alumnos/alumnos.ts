@@ -14,6 +14,9 @@ import { Alumno, AlumnoService } from '../../services/alumno';
 export class Alumnos implements OnInit {
   private alumnoService = inject(AlumnoService);
 
+  mostrarConfirmacionEliminar = false;
+  alumnoPendienteEliminar: Alumno | null = null;
+
   alumnos: Alumno[] = [];
   busqueda = '';
   mostrarFormulario = false;
@@ -99,47 +102,79 @@ error: (err: HttpErrorResponse) => {
         this.listarAlumnos();
       },
 
-error: (err: HttpErrorResponse) => {
-  console.error('Error al guardar alumno:', err);
+  error: (err: HttpErrorResponse) => {
+    console.error('Error al guardar alumno:', err);
 
-  if (err.status === 0) {
-    this.error = 'No hay conexión con el servidor. Comprueba que Spring Boot esté ejecutándose.';
-  } else if (err.status === 400) {
-    this.error = 'Los datos enviados no son válidos. Revisa el formulario.';
-  } else if (err.status === 409) {
-    this.error = 'Ese correo electrónico ya está registrado.';
-  } else {
-    this.error = 'No se pudo guardar el alumno. Inténtalo nuevamente.';
+    if (err.status === 0) {
+      this.error = 'No hay conexión con el servidor. Comprueba que Spring Boot esté ejecutándose.';
+    } else if (err.status === 400) {
+      this.error = 'Los datos enviados no son válidos. Revisa el formulario.';
+    } else if (err.status === 409) {
+      const correoActual = this.formulario.correo?.trim().toLocaleLowerCase();
+      const telefonoActual = this.formulario.telefono?.trim();
+
+      const correoDuplicado = this.alumnos.some(a =>
+        a.id !== this.formulario.id &&
+        a.correo?.trim().toLocaleLowerCase() === correoActual
+      );
+
+      const telefonoDuplicado = this.alumnos.some(a =>
+        a.id !== this.formulario.id &&
+        a.telefono?.trim() === telefonoActual
+      );
+
+      if (telefonoDuplicado) {
+        this.error = 'Ese número de teléfono ya está registrado.';
+      } else if (correoDuplicado) {
+        this.error = 'Ese correo electrónico ya está registrado.';
+      } else {
+        this.error = 'Ya existe un alumno con esos datos.';
+      }
+    } else {
+      this.error = 'No se pudo guardar el alumno. Inténtalo nuevamente.';
+    }
   }
-}
 
     });
   }
 
-  eliminar(alumno: Alumno): void {
-    if (!alumno.id) return;
 
-    const confirmar = confirm(
-      `¿Deseas eliminar a ${alumno.nombres} ${alumno.apellidos}?`
-    );
-
-    if (!confirmar) return;
-
-    this.mensaje = '';
-    this.error = '';
-
-    this.alumnoService.eliminar(alumno.id).subscribe({
-      next: () => {
-        this.mensaje = 'Alumno eliminado correctamente.';
-        this.listarAlumnos();
-      },
-error: (err: HttpErrorResponse) => {
-  console.error(err);
-  this.error = 'No se pudo completar la operación.';
-  this.cargando = false;
+eliminar(alumno: Alumno): void {
+  this.alumnoPendienteEliminar = alumno;
+  this.mostrarConfirmacionEliminar = true;
 }
-    });
+
+cancelarEliminacion(): void {
+  this.mostrarConfirmacionEliminar = false;
+  this.alumnoPendienteEliminar = null;
+}
+
+confirmarEliminacion(): void {
+  const alumno = this.alumnoPendienteEliminar;
+
+  if (!alumno?.id) {
+    return;
   }
+
+  this.mensaje = '';
+  this.error = '';
+
+  this.alumnoService.eliminar(alumno.id).subscribe({
+    next: () => {
+      this.mostrarConfirmacionEliminar = false;
+      this.alumnoPendienteEliminar = null;
+      this.mensaje = 'Alumno eliminado correctamente.';
+      this.listarAlumnos();
+    },
+    error: (err: HttpErrorResponse) => {
+      console.error('Error al eliminar alumno:', err);
+      this.mostrarConfirmacionEliminar = false;
+      this.alumnoPendienteEliminar = null;
+      this.error = 'No se pudo eliminar el alumno. Inténtalo nuevamente.';
+    }
+  });
+}
+
 
   cancelar(): void {
     this.mostrarFormulario = false;

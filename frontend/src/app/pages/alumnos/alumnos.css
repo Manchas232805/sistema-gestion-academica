@@ -506,3 +506,128 @@
     width: 100%;
   }
 }
+
+
+/* Modal de confirmación para eliminar alumnos */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(15, 23, 42, 0.55);
+  backdrop-filter: blur(5px);
+}
+
+.modal-confirmacion {
+  width: 100%;
+  max-width: 430px;
+  padding: 30px;
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+  background: #ffffff;
+  box-shadow: 0 24px 70px rgba(15, 23, 42, 0.25);
+  animation: modalEntrada 0.2s ease-out;
+}
+
+.modal-icono {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  margin-bottom: 18px;
+  border-radius: 14px;
+  background: #fff1f2;
+  color: #e11d48;
+  font-size: 25px;
+  font-weight: 800;
+}
+
+.modal-confirmacion h2 {
+  margin: 0 0 12px;
+  color: #172554;
+  font-size: 22px;
+  font-weight: 800;
+}
+
+.modal-confirmacion p {
+  margin: 0 0 12px;
+  color: #475569;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.modal-confirmacion strong {
+  color: #0f172a;
+}
+
+.modal-confirmacion .modal-aviso {
+  color: #94a3b8;
+  font-size: 12px;
+}
+
+.modal-acciones {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.modal-acciones button {
+  min-height: 42px;
+  padding: 0 18px;
+  border-radius: 9px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.modal-acciones .btn-cancelar {
+  border: 1px solid #cbd5e1;
+  background: #ffffff;
+  color: #475569;
+}
+
+.modal-acciones .btn-cancelar:hover {
+  background: #f8fafc;
+}
+
+.modal-acciones .btn-eliminar {
+  border: none;
+  background: #e11d48;
+  color: #ffffff;
+}
+
+.modal-acciones .btn-eliminar:hover {
+  background: #be123c;
+  transform: translateY(-1px);
+}
+
+@keyframes modalEntrada {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (max-width: 480px) {
+  .modal-confirmacion {
+    padding: 24px;
+  }
+
+  .modal-acciones button {
+    padding: 0 13px;
+  }
+}
+

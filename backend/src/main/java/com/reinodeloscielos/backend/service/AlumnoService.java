@@ -33,6 +33,7 @@ public class AlumnoService {
     public Alumno crear(Alumno alumno) {
         normalizarCorreo(alumno);
         validarCorreoDuplicado(alumno.getCorreo(), null);
+        validarTelefonoDuplicado(alumno.getTelefono(), null);
         alumno.setId(null);
         return alumnoRepository.save(alumno);
     }
@@ -42,6 +43,7 @@ public class AlumnoService {
 
         normalizarCorreo(datos);
         validarCorreoDuplicado(datos.getCorreo(), id);
+        validarTelefonoDuplicado(datos.getTelefono(), id);
 
         alumno.setNombres(datos.getNombres());
         alumno.setApellidos(datos.getApellidos());
@@ -80,4 +82,26 @@ public class AlumnoService {
             );
         }
     }
+
+
+    private void validarTelefonoDuplicado(String telefono, Long idActual) {
+        if (telefono == null || telefono.isBlank()) {
+            return;
+        }
+
+        String telefonoNormalizado = telefono.trim();
+
+        boolean duplicado = idActual == null
+                ? alumnoRepository.existsByTelefono(telefonoNormalizado)
+                : alumnoRepository.existsByTelefonoAndIdNot(
+                        telefonoNormalizado, idActual);
+
+        if (duplicado) {
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    "Ya existe un alumno con ese teléfono"
+            );
+        }
+    }
+
 }
