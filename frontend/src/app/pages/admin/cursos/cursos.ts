@@ -15,6 +15,17 @@ import { DocenteService } from '../../../services/docentes';
 })
 export class CursosComponent implements OnInit {
 
+  mostrarConfirmacionEliminar = false;
+  cursoPendienteEliminar: number | null = null;
+
+  get cursosConDocente(): number {
+  return this.cursos.filter(c => c.idDocente != null).length;
+}
+
+get cursosSinDocente(): number {
+  return this.cursos.filter(c => c.idDocente == null).length;
+}
+
   cursos: Curso[] = [];
   docentes: any[] = [];
 
@@ -77,6 +88,20 @@ export class CursosComponent implements OnInit {
     return `${docente.nombres} ${docente.apellidos}`;
   }
 
+
+obtenerEspecialidadDocente(idDocente: number | null): string {
+  if (idDocente == null) {
+    return '';
+  }
+
+  const docente = this.docentes.find(
+    d => Number(d.id) === Number(idDocente)
+  );
+
+  return docente?.especialidad ?? 'Especialidad no registrada';
+}
+
+
   toggleFormulario(): void {
     this.mostrarFormulario = !this.mostrarFormulario;
 
@@ -126,18 +151,37 @@ export class CursosComponent implements OnInit {
     });
   }
 
-  eliminarCurso(id: number): void {
-    if (confirm('¿Deseas eliminar este curso?')) {
 
-      this.cursoService.eliminar(id).subscribe({
-        next: () => {
-          this.cargarCursos();
-        },
-        error: (err) => {
-          console.error('Error al eliminar curso:', err);
-        }
-      });
+eliminarCurso(id: number): void {
+  this.cursoPendienteEliminar = id;
+  this.mostrarConfirmacionEliminar = true;
+}
 
-    }
+cancelarEliminacion(): void {
+  this.mostrarConfirmacionEliminar = false;
+  this.cursoPendienteEliminar = null;
+}
+
+confirmarEliminacion(): void {
+  const id = this.cursoPendienteEliminar;
+
+  if (id === null) {
+    return;
   }
+
+  this.cursoService.eliminar(id).subscribe({
+    next: () => {
+      this.mostrarConfirmacionEliminar = false;
+      this.cursoPendienteEliminar = null;
+      this.cargarCursos();
+    },
+    error: (err) => {
+      console.error('Error al eliminar curso:', err);
+      this.mostrarConfirmacionEliminar = false;
+      this.cursoPendienteEliminar = null;
+      alert('No se pudo eliminar el curso. Inténtalo nuevamente.');
+    }
+  });
+}
+
 }
