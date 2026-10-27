@@ -4,12 +4,24 @@ import { Inicio } from './pages/inicio/inicio';
 import { Alumnos } from './pages/alumnos/alumnos';
 import { Docentes } from './pages/docentes/docentes';
 import { CursosComponent } from './pages/admin/cursos/cursos';
+import { Login } from './pages/login/login';
 import { Matriculas } from './pages/matriculas/matriculas';
+import { authGuard } from './guards/auth-guard';
 
 export const routes: Routes = [
   {
     path: '',
+    redirectTo: 'login',
+    pathMatch: 'full'
+  },
+  {
+    path: 'login',
+    component: Login
+  },
+  {
+    path: '',
     component: Dashboard,
+    canActivate: [authGuard],
     children: [
       {
         path: '',
@@ -29,17 +41,14 @@ export const routes: Routes = [
         component: Docentes
       },
       {
-        path: 'matriculas',
-        component: Matriculas
-      },
-      {
         path: 'cursos',
         component: CursosComponent
-      }
+      },
+      { path: 'matriculas', component: Matriculas }
     ]
   },
   {
     path: '**',
-    redirectTo: 'inicio'
+    redirectTo: 'login'
   }
 ];
