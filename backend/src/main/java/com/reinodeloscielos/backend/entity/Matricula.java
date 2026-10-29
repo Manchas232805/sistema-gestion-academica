@@ -1,6 +1,8 @@
 package com.reinodeloscielos.backend.entity;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 import java.time.LocalDate;
 
 @Entity
@@ -19,7 +21,8 @@ public class Matricula {
     private Curso curso;
     @Column(nullable = false)
     private LocalDate fecha;
-    @Enumerated(EnumType.STRING) @Column(nullable = false, length = 10)
+    @Enumerated(EnumType.STRING) @JdbcTypeCode(SqlTypes.VARCHAR)
+    @Column(nullable = false, length = 10)
     private Estado estado = Estado.ACTIVA;
 
     public Long getId() { return id; }

@@ -6,7 +6,7 @@ se rechaza todo el lote sin guardar inscripciones parciales.
 
 ## Puesta en marcha
 
-La base de datos es PostgreSQL. Consulta `INTEGRACION.md` para configurar
+La base de datos es MySQL/MariaDB de XAMPP. Consulta `INTEGRACION.md` para configurar
 las variables de entorno, crear el administrador e iniciar ambos servicios.
 Tras iniciar sesión, abre `http://localhost:4200/matriculas`.
 
@@ -49,4 +49,4 @@ Compilación de la interfaz: desde `frontend`, `npm run build`.
 Pruebas aisladas de la interfaz: `npm run test:matriculas` (requiere Chrome).
 También se puede ejecutar toda la suite con `npm run test:ci`.
 Las pruebas Java requieren JDK 21. La comprobación de extremo a extremo requiere
-PostgreSQL iniciado y datos de alumnos/cursos.
+MySQL/MariaDB iniciado y datos de alumnos/cursos.

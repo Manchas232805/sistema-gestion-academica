@@ -1,59 +1,81 @@
-# Integración en el fork
+# Matriculas con MySQL de XAMPP
 
-Esta rama integra el ZIP actualizado del equipo y conserva el módulo de matrículas.
-No modifica el repositorio de SebastianCabezas03 ni la rama de su pull request.
+La rama incorpora el main del equipo y mantiene el modulo de matriculas.
+El backend conserva el conector JDBC MySQL del principal. El volcado original
+del equipo identifica MariaDB 10.4.32; XAMPP presenta ese servicio como MySQL.
 
 ## Ejecutar en Windows
 
-Requisitos: PostgreSQL, JDK 21 y Node.js compatible con Angular 20.
-Crear una base vacía llamada `gestion_academica`. Desde PowerShell, en `backend`:
+Requisitos: XAMPP, JDK 21 y Node.js compatible con Angular 20.
+Iniciar MySQL en XAMPP y crear gestion_academica con utf8mb4.
+Apache solo es necesario si se administra mediante phpMyAdmin.
+
+Desde PowerShell, en backend:
 
 ```powershell
-$env:DB_USERNAME = "postgres"
-$env:DB_PASSWORD = Read-Host "Contraseña de PostgreSQL" -MaskInput
-$env:ADMIN_PASSWORD = Read-Host "Contraseña para el administrador inicial" -MaskInput
+$env:ADMIN_PASSWORD = Read-Host "Contrasena del administrador inicial"
 ./mvnw.cmd spring-boot:run
 ```
 
-`ADMIN_PASSWORD` solo se usa si no existe el usuario `admin`. No cambia su clave
-si ya existe. Sin esta variable, no se crea una cuenta nueva y se informa al iniciar.
-`DB_URL` permite cambiar servidor/base y `SERVER_PORT` el puerto del backend.
-Spring Boot no carga archivos `.env` automáticamente.
+La conexion predeterminada es localhost:3306/gestion_academica, usuario root,
+sin contrasena. Si la instalacion es diferente, definir DB_URL, DB_USERNAME y
+DB_PASSWORD antes del arranque. DB_URL debe usar jdbc:mysql://.
+Las variables del proceso tienen prioridad sobre los valores predeterminados.
+No publicar contrasenas. Spring Boot no carga archivos .env automaticamente.
 
-Hibernate crea/actualiza el esquema al iniciar. Como alternativa manual,
-`database/gestion_academica.sql` contiene el esquema PostgreSQL sin datos de muestra.
-`CREATE TABLE IF NOT EXISTS` no migra estructuras existentes ni convierte MySQL.
-Para una base ya existente, revisar sus cambios de esquema antes de aplicarlos.
+ADMIN_PASSWORD crea admin si no existe; no cambia la clave de una cuenta existente.
+Si no existe admin y falta la variable, se informa y no se crea la cuenta.
 
-Desde `frontend`: `npm ci`, luego `npm start`.
-Abrir http://localhost:4200/login e ingresar con el administrador configurado.
-Registrar alumnos y cursos antes de crear matrículas.
+Desde frontend: npm ci y npm start. Abrir http://localhost:4200/login.
+Registrar primero alumnos y cursos y luego acceder a /matriculas.
 
-## Cambios
+## Base de datos
 
-- Conserva el login y las mejoras visuales de alumnos/cursos del archivo del equipo.
-- Restaura la ruta `/matriculas` y sus operaciones de registro, edición y cancelación.
-- Inicio consulta alumnos, docentes, cursos y matrículas de forma independiente.
-  El total de matrículas incluye activas y canceladas. Un fallo muestra un guion,
-  sin convertir un error de conexión en un total cero.
-- Activa los accesos rápidos de los cuatro módulos.
-- Elimina el driver MySQL y usa configuración PostgreSQL mediante variables.
-- Adapta ambos scripts SQL a PostgreSQL, sin contraseñas ni datos personales.
-- Desactiva la incorporación de fuentes remotas durante la compilación. Las fuentes
-  externas del HTML siguen requiriendo conexión en el navegador.
+Hibernate crea o actualiza las tablas con DB_DDL_AUTO=update por defecto.
+Como alternativa, importar database/gestion_academica.sql en una base vacia.
+Para un proyecto existente con alumnos y curso, database/matriculas.sql agrega
+la tabla de inscripciones. Ejecutar los scripts en la base seleccionada.
+Usar InnoDB y referencias BIGINT con signo para las claves foraneas.
+CREATE TABLE IF NOT EXISTS no convierte tablas ni migra esquemas existentes.
+Respaldar una base con informacion antes de cualquier cambio de estructura.
 
-## Validación
+Los scripts corresponden a las entidades actuales: usuarios, alumnos, docente,
+curso y matriculas. Los diagramas del informe pueden incluir funciones propuestas
+que aun no estan implementadas. Los datos de prueba no se incluyen en el repositorio.
 
-`npm run build` compila producción. `npm run test:ci` ejecuta las pruebas Angular
-en ChromeHeadless. El navegador Chrome debe estar instalado.
-`./mvnw.cmd -Dtest=MatriculaServiceTests test` ejecuta las pruebas Java del servicio.
-La prueba de contexto completa requiere PostgreSQL y las variables de conexión.
+## Comportamiento
 
-## Limitación heredada de autenticación
+- Inscripcion en varios cursos en una operacion atomica.
+- Combinacion alumno/curso unica, incluso si fue cancelada.
+- Edicion, cancelacion y reactivacion conservando el mismo identificador.
+- Inicio carga los cuatro totales por separado e incluye matriculas canceladas.
+- Alumnos y cursos con matriculas conservan sus referencias; no se borran en cascada.
 
-El login verifica credenciales, pero SecurityConfig aún permite las solicitudes de
-la API y el guard solo protege la navegación del navegador. Esta integración no
-implementa JWT ni sesiones autenticadas. Se debe completar la autorización del
-backend antes de desplegar el sistema fuera de un entorno local de desarrollo.
+## Verificacion
 
-Verificación de esta entrega: compilación de producción correcta y 13 pruebas Angular correctas. Quedan advertencias de tamaño de estilos. No se ejecutó Java ni la conexión PostgreSQL por falta de JDK configurado en este entorno.
+Frontend: npm run build y npm run test:ci (Chrome instalado).
+Backend: ./mvnw.cmd test o ./mvnw.cmd package, con base de pruebas y variables
+de conexion configuradas. Estas pruebas no deben ejecutarse sobre datos del equipo.
+
+## Autorizacion pendiente
+
+El login verifica credenciales, pero la API conserva permitAll del principal.
+El guard solo protege navegacion. Completar autorizacion del backend antes de
+un despliegue publico; esta integracion no implementa JWT ni sesiones autenticadas.
+
+## Resultado de la comprobacion de MySQL
+
+Validado el 28 de octubre de 2026 con MySQL Connector/J y MariaDB 10.4.32
+portatil, la version indicada en el SQL original del equipo. No se instalo XAMPP
+en este entorno ni se probo por separado MySQL Server 8.
+
+- Backend empaquetado: 8 pruebas correctas, incluido arranque con base real.
+- Scripts importados en una base vacia y validados por Hibernate con ddl-auto=validate.
+- 22 comprobaciones HTTP correctas: login valido e invalido, registros, duplicados,
+  lote atomico, fecha futura, seleccion vacia, cancelacion idempotente y reactivacion.
+- Datos conservados tras reiniciar el backend.
+- Reaplicacion del script sin borrar los registros de prueba.
+- Frontend compilado en produccion con advertencias existentes de tamano de estilos.
+
+La comprobacion no equivale a una auditoria de seguridad ni valida una base del
+equipo con cambios de esquema desconocidos.
