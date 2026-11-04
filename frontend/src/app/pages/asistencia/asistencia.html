@@ -1,0 +1,166 @@
+<div class="attendance-page">
+
+  <header class="page-heading">
+    <div class="heading-info">
+      <div class="heading-icon">
+        <i class="bi bi-calendar-check"></i>
+      </div>
+
+      <div>
+        <span class="eyebrow">PLATAFORMA ACADÉMICA</span>
+        <h1>Mi Asistencia</h1>
+        <p>Consulta tu historial y rendimiento de asistencia a clases.</p>
+      </div>
+    </div>
+  </header>
+
+  @if (cargando) {
+    <div class="loading-state">
+      <i class="bi bi-arrow-repeat"></i>
+      <p>Cargando tu historial de asistencia...</p>
+    </div>
+  } @else if (error) {
+    <div class="error-state">
+      <i class="bi bi-exclamation-circle"></i>
+      <p>{{ error }}</p>
+      <button class="btn-primary-custom" (click)="cargarAsistencia()">
+        Reintentar
+      </button>
+    </div>
+  } @else {
+
+    <section class="attendance-summary">
+
+      <article class="summary-card">
+        <div class="summary-icon icon-green">
+          <i class="bi bi-check-circle"></i>
+        </div>
+        <div>
+          <span>Asistencias</span>
+          <strong>{{ totalAsistencias }}</strong>
+        </div>
+      </article>
+
+      <article class="summary-card">
+        <div class="summary-icon icon-red">
+          <i class="bi bi-x-circle"></i>
+        </div>
+        <div>
+          <span>Faltas</span>
+          <strong>{{ totalFaltas }}</strong>
+        </div>
+      </article>
+
+      <article class="summary-card">
+        <div class="summary-icon icon-orange">
+          <i class="bi bi-clock"></i>
+        </div>
+        <div>
+          <span>Tardanzas</span>
+          <strong>{{ totalTardanzas }}</strong>
+        </div>
+      </article>
+
+    </section>
+
+    <section class="attendance-progress-card">
+      <div class="progress-heading">
+        <div>
+          <span class="eyebrow">RENDIMIENTO ACADÉMICO</span>
+          <h2>Porcentaje de asistencia</h2>
+          <p>Resumen de tus registros de asistencia.</p>
+        </div>
+
+        <strong class="attendance-percentage">
+          {{ porcentajeAsistencia }}%
+        </strong>
+      </div>
+
+      <div class="progress-track">
+        <div
+          class="progress-fill"
+          [style.width.%]="porcentajeAsistencia">
+        </div>
+      </div>
+    </section>
+
+    <section class="attendance-table-card">
+
+      <div class="table-heading">
+        <div>
+          <h2>Historial de asistencia</h2>
+          <p>Consulta tus registros por curso y fecha.</p>
+        </div>
+
+        <span class="record-count">
+          {{ asistencias.length }}
+          {{ asistencias.length === 1 ? 'registro' : 'registros' }}
+        </span>
+      </div>
+
+      @if (asistencias.length > 0) {
+
+        <div class="table-responsive">
+          <table class="attendance-table">
+
+            <thead>
+              <tr>
+                <th>Fecha</th>
+                <th>Curso</th>
+                <th>Estado</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              @for (registro of asistencias; track registro.id) {
+                <tr>
+                  <td>{{ registro.fecha | date:'dd/MM/yyyy' }}</td>
+
+                  <td>
+                    <div class="course-name">
+                      <i class="bi bi-journal-bookmark"></i>
+                      {{ registro.cursoNombre }}
+                    </div>
+                  </td>
+
+                  <td>
+                    @if (registro.estado === 'ASISTIO') {
+                      <span class="status-badge status-present">
+                        <i class="bi bi-check-circle-fill"></i>
+                        Asistió
+                      </span>
+                    } @else if (registro.estado === 'FALTA') {
+                      <span class="status-badge status-absent">
+                        <i class="bi bi-x-circle-fill"></i>
+                        Falta
+                      </span>
+                    } @else {
+                      <span class="status-badge status-late">
+                        <i class="bi bi-clock-fill"></i>
+                        Tardanza
+                      </span>
+                    }
+                  </td>
+                </tr>
+              }
+            </tbody>
+
+          </table>
+        </div>
+
+      } @else {
+
+        <div class="empty-state">
+          <div class="empty-icon">
+            <i class="bi bi-calendar2-x"></i>
+          </div>
+
+          <h3>Aún no tienes registros</h3>
+          <p>Cuando tus docentes registren tu asistencia, aparecerá aquí.</p>
+        </div>
+
+      }
+
+    </section>
+  }
+</div>

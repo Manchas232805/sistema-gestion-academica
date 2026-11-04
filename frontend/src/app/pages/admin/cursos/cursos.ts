@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { Curso } from '../../../models/Curso';
 import { CursoService } from '../../../services/curso-service';
 import { DocenteService } from '../../../services/docentes';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-cursos',
@@ -15,6 +16,7 @@ import { DocenteService } from '../../../services/docentes';
 })
 export class CursosComponent implements OnInit {
 
+  rol: string = sessionStorage.getItem('rol') || '';
   mostrarConfirmacionEliminar = false;
   cursoPendienteEliminar: number | null = null;
 
@@ -42,12 +44,30 @@ get cursosSinDocente(): number {
   constructor(
     private cursoService: CursoService,
     private docenteService: DocenteService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private http: HttpClient
   ) {}
 
+
+
   ngOnInit(): void {
-    this.cargarCursos();
-    this.cargarDocentes();
+    const rol = sessionStorage.getItem('rol');
+
+    if (rol === 'ALUMNO') {
+      this.cargarMisCursos();
+      return;
+    }
+
+    if (rol === 'ADMIN'){
+      this.cargarCursos();
+      this.cargarDocentes();
+      return;
+    }
+
+    if (rol === 'DOCENTE'){
+      console.log('Vista de cursos para docente pendiente');
+    }
+
   }
 
   cargarCursos(): void {
@@ -61,6 +81,24 @@ get cursosSinDocente(): number {
       }
     });
   }
+
+  cargarMisCursos(): void {
+  this.http.get<any[]>('http://localhost:8080/api/mis-cursos').subscribe({
+    next: (data) => {
+      this.cursos = data.map(curso => ({
+        id: curso.id,
+        nombre: curso.nombreCurso,
+        idDocente: null,
+        nombreDocente: curso.docente
+      }));
+
+      this.cdr.detectChanges();
+    },
+    error: (err) => {
+      console.error('Error al cargar mis cursos:', err);
+    }
+  });
+}
 
   cargarDocentes(): void {
     this.docenteService.listar().subscribe({

@@ -1,0 +1,160 @@
+<div class="report-page">
+
+  <header class="page-heading">
+    <div class="heading-info">
+      <div class="heading-icon">
+        <i class="bi bi-clipboard-data"></i>
+      </div>
+      <div>
+        <span class="eyebrow">GESTIÓN ACADÉMICA</span>
+        <h1>Reporte de Asistencia</h1>
+        <p>Consulta y supervisa la asistencia de todos los alumnos.</p>
+      </div>
+    </div>
+
+    <button class="btn-refresh" (click)="cargarAsistencias()"
+            [disabled]="cargando">
+      <i class="bi bi-arrow-clockwise"></i>
+      Actualizar
+    </button>
+  </header>
+
+  <section class="stats-grid">
+    <article class="stat-card">
+      <div class="stat-icon blue"><i class="bi bi-journal-check"></i></div>
+      <div>
+        <span>Total de registros</span>
+        <strong>{{ asistencias.length }}</strong>
+      </div>
+    </article>
+
+    <article class="stat-card">
+      <div class="stat-icon green"><i class="bi bi-check-circle"></i></div>
+      <div>
+        <span>Asistencias</span>
+        <strong>{{ totalAsistencias }}</strong>
+      </div>
+    </article>
+
+    <article class="stat-card">
+      <div class="stat-icon red"><i class="bi bi-x-circle"></i></div>
+      <div>
+        <span>Faltas</span>
+        <strong>{{ totalFaltas }}</strong>
+      </div>
+    </article>
+
+    <article class="stat-card">
+      <div class="stat-icon orange"><i class="bi bi-clock"></i></div>
+      <div>
+        <span>Tardanzas</span>
+        <strong>{{ totalTardanzas }}</strong>
+      </div>
+    </article>
+  </section>
+
+  <section class="percentage-card">
+    <div class="percentage-info">
+      <div>
+        <h2>Porcentaje de asistencia</h2>
+        <p>Basado en todos los registros disponibles.</p>
+      </div>
+      <strong>{{ porcentajeAsistencia }}%</strong>
+    </div>
+
+    <div class="progress-track">
+      <div class="progress-value"
+          [style.width.%]="porcentajeAsistencia"></div>
+    </div>
+  </section>
+
+  @if (error) {
+    <div class="message-error">
+      <i class="bi bi-exclamation-circle"></i>
+      {{ error }}
+    </div>
+  }
+
+  <section class="table-card">
+    <div class="table-heading">
+      <div>
+        <h2>Historial de asistencia</h2>
+        <p>Listado de registros de todos los alumnos.</p>
+      </div>
+      <span class="record-count">
+        {{ asistenciasFiltradas.length }} registros
+      </span>
+    </div>
+
+    <div class="filters">
+      <div class="search-box">
+        <i class="bi bi-search"></i>
+        <input type="text"
+              placeholder="Buscar alumno o curso..."
+              [(ngModel)]="busqueda"
+              (ngModelChange)="aplicarFiltros()">
+      </div>
+
+      <select [(ngModel)]="filtroEstado"
+              (ngModelChange)="aplicarFiltros()">
+        <option value="TODOS">Todos los estados</option>
+        <option value="ASISTIO">Asistió</option>
+        <option value="FALTA">Falta</option>
+        <option value="TARDANZA">Tardanza</option>
+      </select>
+    </div>
+
+    @if (cargando) {
+      <div class="empty-state">
+        <i class="bi bi-arrow-repeat"></i>
+        <p>Cargando registros...</p>
+      </div>
+    } @else if (asistenciasFiltradas.length > 0) {
+      <div class="table-responsive">
+        <table class="report-table">
+          <thead>
+            <tr>
+              <th>Alumno</th>
+              <th>Curso</th>
+              <th>Fecha</th>
+              <th>Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (a of asistenciasFiltradas; track a.id) {
+              <tr>
+                <td>
+                  <div class="student-name">
+                    <div class="student-avatar">
+                      {{ a.alumnoNombre.charAt(0) }}
+                    </div>
+                    <strong>{{ a.alumnoNombre }}</strong>
+                  </div>
+                </td>
+                <td>{{ a.cursoNombre }}</td>
+                <td>{{ a.fecha | date:'dd/MM/yyyy' }}</td>
+                <td>
+                  <span class="status"
+                        [ngClass]="{
+                          'status-present': a.estado === 'ASISTIO',
+                          'status-absent': a.estado === 'FALTA',
+                          'status-late': a.estado === 'TARDANZA'
+                        }">
+                    {{ a.estado === 'ASISTIO' ? 'Asistió' :
+                      a.estado === 'FALTA' ? 'Falta' : 'Tardanza' }}
+                  </span>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    } @else {
+      <div class="empty-state">
+        <i class="bi bi-clipboard-x"></i>
+        <h3>No se encontraron registros</h3>
+        <p>No hay asistencias que coincidan con los filtros seleccionados.</p>
+      </div>
+    }
+  </section>
+</div>

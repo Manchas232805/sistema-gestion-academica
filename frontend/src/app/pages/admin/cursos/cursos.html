@@ -8,11 +8,13 @@
 
       <div>
         <span class="eyebrow">PLATAFORMA ACADÉMICA</span>
-        <h1>Gestión de Cursos</h1>
-        <p>Administra los cursos y sus docentes responsables.</p>
+        <h1>{{ rol === 'ALUMNO' ? 'Mis Cursos' : 'Gestión de Cursos' }}</h1>
+
+        <p>{{ rol === 'ALUMNO' ? 'Consulta los cursos en los que estás inscrito.' : 'Administra los cursos y sus docentes responsables.' }}</p>
       </div>
     </div>
 
+    @if (rol === 'ADMIN') {
     <button
       type="button"
       class="btn-primary-custom"
@@ -27,8 +29,10 @@
 
       {{ mostrarFormulario ? 'Cancelar' : 'Nuevo curso' }}
     </button>
+  }
   </header>
 
+  @if (rol === 'ADMIN') {
   <section class="course-summary">
     <article class="summary-card">
       <div class="summary-icon icon-blue">
@@ -60,8 +64,9 @@
       </div>
     </article>
   </section>
+}
 
-  @if (mostrarFormulario) {
+  @if (rol === 'ADMIN' && mostrarFormulario) {
     <section class="course-form-card">
       <div class="form-heading">
         <div>
@@ -156,7 +161,9 @@
               <th class="id-column">ID</th>
               <th>Nombre del curso</th>
               <th>Docente responsable</th>
-              <th class="actions-column">Acciones</th>
+              @if (rol === 'ADMINN') {
+                <th class="actions-column">Acciones</th>
+              }
             </tr>
           </thead>
 
@@ -177,19 +184,27 @@
                 </td>
 
                 <td>
-                  @if (curso.idDocente) {
+                  @if (rol === 'ALUMNO'){
                     <span class="teacher-name">
                       <i class="bi bi-person-circle"></i>
-                      {{ obtenerNombreDocente(curso.idDocente) }}
+                      {{ curso.nombreDocente ||'Docente no asignado' }}
                     </span>
                   } @else {
-                    <span class="teacher-unassigned">
-                      <i class="bi bi-exclamation-circle"></i>
-                      Sin asignar
-                    </span>
+                    @if (curso.idDocente){
+                      <span class="teacher-name">
+                        <i class="bi bi-person-circle"></i>
+                        {{ obtenerNombreDocente(curso.idDocente)}}
+                      </span>
+                    } @else {
+                      <span class="teacher-unassigned">
+                        <i class="bi bi-exclamation-circle"></i>
+                        Sin Asignar
+                      </span>
+                    }
                   }
                 </td>
 
+                @if (rol === 'ADMIN'){
                 <td>
                   <div class="action-buttons">
                     <button
@@ -211,6 +226,7 @@
                     </button>
                   </div>
                 </td>
+              }
               </tr>
             }
           </tbody>

@@ -14,8 +14,13 @@ import { Router } from '@angular/router';
 export class Login {
   username = '';
   password = '';
+  mostrarPassword = false;
   cargando = false;
   error = '';
+
+  alternarPassword(): void {
+  this.mostrarPassword = !this.mostrarPassword;
+}
 
   private readonly apiUrl = 'http://localhost:8080/api/auth/login';
 

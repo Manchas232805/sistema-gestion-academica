@@ -1,0 +1,160 @@
+<div class="attendance-page">
+
+  <header class="page-heading">
+    <div class="heading-info">
+      <div class="heading-icon">
+        <i class="bi bi-calendar-check"></i>
+      </div>
+
+      <div>
+        <span class="eyebrow">PLATAFORMA ACADÉMICA</span>
+        <h1>Registro de Asistencia</h1>
+        <p>Registra la asistencia de los alumnos de tus cursos.</p>
+      </div>
+    </div>
+  </header>
+
+  <section class="selection-card">
+    <div class="field-group">
+      <label for="curso">Seleccionar curso</label>
+
+      <select
+        id="curso"
+        class="form-control-custom"
+        [(ngModel)]="cursoSeleccionado"
+        (change)="seleccionarCurso()">
+
+        <option [ngValue]="null">Selecciona un curso</option>
+
+        @for (curso of cursos; track curso.id) {
+          <option [ngValue]="curso.id">
+            {{ curso.nombreCurso }}
+          </option>
+        }
+      </select>
+    </div>
+
+    <div class="field-group">
+      <label for="fecha">Fecha de clase</label>
+
+      <input
+        id="fecha"
+        type="date"
+        class="form-control-custom"
+        [(ngModel)]="fecha">
+    </div>
+  </section>
+
+  @if (error) {
+    <div class="message-error">
+      <i class="bi bi-exclamation-circle"></i>
+      {{ error }}
+    </div>
+  }
+
+  @if (mensaje) {
+    <div class="message-success">
+      <i class="bi bi-check-circle"></i>
+      {{ mensaje }}
+    </div>
+  }
+
+  @if (cargando) {
+    <div class="empty-state">
+      <i class="bi bi-arrow-repeat"></i>
+      <p>Cargando alumnos...</p>
+    </div>
+  }
+
+  @if (!cargando && cursoSeleccionado && alumnos.length > 0) {
+
+    <section class="student-table-card">
+
+      <div class="table-heading">
+        <div>
+          <h2>Lista de alumnos</h2>
+          <p>Selecciona el estado de asistencia de cada estudiante.</p>
+        </div>
+
+        <span class="record-count">
+          {{ alumnos.length }} alumnos
+        </span>
+      </div>
+
+      <div class="table-responsive">
+        <table class="attendance-table">
+
+          <thead>
+            <tr>
+              <th>Alumno</th>
+              <th>Estado de asistencia</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            @for (alumno of alumnos; track alumno.alumnoId) {
+              <tr>
+                <td>
+                  <div class="student-name">
+                    <div class="student-avatar">
+                      {{ alumno.nombreAlumno.charAt(0) }}
+                    </div>
+
+                    <strong>{{ alumno.nombreAlumno }}</strong>
+                  </div>
+                </td>
+
+                <td>
+                  <select
+                    class="status-select"
+                    [(ngModel)]="alumno.estado">
+
+                    <option value="ASISTIO">Asistió</option>
+                    <option value="FALTA">Falta</option>
+                    <option value="TARDANZA">Tardanza</option>
+
+                  </select>
+                </td>
+              </tr>
+            }
+          </tbody>
+
+        </table>
+      </div>
+
+      <div class="form-actions">
+        <span>{{ alumnos.length }} alumnos por registrar</span>
+
+        <button
+          type="button"
+          class="btn-save"
+          [disabled]="guardando"
+          (click)="guardarAsistencia()">
+
+          <i class="bi bi-check2-circle"></i>
+
+          {{ guardando ? 'Guardando...' : 'Guardar asistencia' }}
+        </button>
+      </div>
+
+    </section>
+
+  } @else if (!cargando && cursoSeleccionado && alumnos.length === 0 && !error) {
+
+    <div class="empty-state">
+      <i class="bi bi-people"></i>
+      <h3>No hay alumnos matriculados</h3>
+      <p>Este curso no tiene alumnos con matrícula activa.</p>
+    </div>
+
+  } @else if (!cursoSeleccionado && !error) {
+
+    <div class="empty-state">
+      <i class="bi bi-journal-bookmark"></i>
+      <h3>Selecciona un curso</h3>
+      <p>Primero selecciona un curso para consultar a tus alumnos.</p>
+    </div>
+
+  }
+
+</div>

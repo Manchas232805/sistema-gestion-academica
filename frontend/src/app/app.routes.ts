@@ -9,6 +9,9 @@ import { Matriculas } from './pages/matriculas/matriculas';
 import { authGuard } from './guards/auth-guard';
 import { MiPerfil } from './pages/mi-perfil/mi-perfil';
 import { Cuentas } from './pages/cuentas/cuentas';
+import { AsistenciaComponent } from './pages/asistencia/asistencia';
+import { RegistroAsistenciaComponent } from './pages/registro-asistencia/registro-asistencia';
+import { ReporteAsistenciaComponent } from './pages/reporte-asistencia/reporte-asistencia';
 
 export const routes: Routes = [
   {
@@ -32,7 +35,10 @@ export const routes: Routes = [
       { path: 'cursos', component: CursosComponent },
       { path: 'matriculas', component: Matriculas },
       { path: 'mi-perfil', component: MiPerfil },
-      { path: 'cuentas', component: Cuentas }
+      { path: 'asistencia', component: AsistenciaComponent},
+      { path: 'registro-asistencia', component: RegistroAsistenciaComponent},
+      { path: 'reporte-asistencia', component: ReporteAsistenciaComponent },
+      { path: 'cuentas', component: Cuentas },
     ]
   },
   {

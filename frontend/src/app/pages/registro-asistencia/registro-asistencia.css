@@ -1,0 +1,298 @@
+.attendance-page {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 28px;
+  color: #172b4d;
+}
+
+.page-heading {
+  display: flex;
+  align-items: center;
+}
+
+.heading-info {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.heading-icon {
+  width: 62px;
+  height: 62px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #e8efff;
+  color: #3264d8;
+  border-radius: 18px;
+  font-size: 27px;
+}
+
+.eyebrow {
+  display: block;
+  color: #8292ae;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  margin-bottom: 5px;
+}
+
+.page-heading h1 {
+  font-size: 29px;
+  font-weight: 800;
+  margin: 0;
+}
+
+.page-heading p {
+  margin: 6px 0 0;
+  color: #8292ae;
+  font-size: 14px;
+}
+
+.selection-card,
+.student-table-card {
+  background: white;
+  border: 1px solid #e7edf6;
+  border-radius: 17px;
+  padding: 24px;
+  box-shadow: 0 5px 18px rgba(25, 50, 90, 0.04);
+}
+
+.selection-card {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 22px;
+}
+
+.field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.field-group label {
+  color: #526581;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.form-control-custom {
+  width: 100%;
+  height: 45px;
+  padding: 0 13px;
+  border: 1px solid #dfe6f0;
+  border-radius: 9px;
+  background: #fff;
+  color: #172b4d;
+  font-size: 13px;
+  outline: none;
+}
+
+.form-control-custom:focus {
+  border-color: #3264d8;
+  box-shadow: 0 0 0 3px rgba(50, 100, 216, 0.1);
+}
+
+.table-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 22px;
+  gap: 15px;
+}
+
+.table-heading h2 {
+  color: #172b4d;
+  font-size: 19px;
+  font-weight: 800;
+  margin: 0;
+}
+
+.table-heading p {
+  color: #8292ae;
+  font-size: 13px;
+  margin: 6px 0 0;
+}
+
+.record-count {
+  background: #edf3ff;
+  color: #3264d8;
+  padding: 7px 13px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.attendance-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.attendance-table thead {
+  background: #f5f7fb;
+}
+
+.attendance-table th {
+  padding: 15px;
+  text-align: left;
+  color: #60718f;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.attendance-table td {
+  padding: 16px 15px;
+  border-bottom: 1px solid #edf1f7;
+  color: #526581;
+  font-size: 13px;
+}
+
+.student-name {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.student-name strong {
+  color: #172b4d;
+  font-weight: 700;
+}
+
+.student-avatar {
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #edf3ff;
+  color: #3264d8;
+  border-radius: 12px;
+  font-weight: 800;
+}
+
+.status-select {
+  width: 180px;
+  height: 39px;
+  padding: 0 10px;
+  border: 1px solid #dfe6f0;
+  border-radius: 8px;
+  color: #526581;
+  background: white;
+  outline: none;
+  cursor: pointer;
+}
+
+.status-select:focus {
+  border-color: #3264d8;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  margin-top: 22px;
+  padding-top: 20px;
+  border-top: 1px solid #edf1f7;
+}
+
+.form-actions span {
+  color: #8292ae;
+  font-size: 13px;
+}
+
+.btn-save {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 9px;
+  background: #3264d8;
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-save:hover {
+  background: #254fb4;
+}
+
+.btn-save:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.message-success,
+.message-error {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 15px 18px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.message-success {
+  background: #e5f8ee;
+  color: #16864e;
+}
+
+.message-error {
+  background: #feecec;
+  color: #dc4545;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 55px 20px;
+  background: white;
+  border: 1px solid #e7edf6;
+  border-radius: 17px;
+  color: #8292ae;
+}
+
+.empty-state > i {
+  font-size: 38px;
+  color: #3264d8;
+}
+
+.empty-state h3 {
+  color: #172b4d;
+  font-size: 18px;
+  font-weight: 800;
+  margin-top: 15px;
+}
+
+.empty-state p {
+  font-size: 13px;
+}
+
+@media (max-width: 768px) {
+  .attendance-page {
+    padding: 16px;
+  }
+
+  .selection-card {
+    grid-template-columns: 1fr;
+  }
+
+  .form-actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .btn-save {
+    justify-content: center;
+  }
+}

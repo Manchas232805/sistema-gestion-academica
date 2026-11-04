@@ -556,3 +556,192 @@ a.quick-card:focus-visible,
 .btn-logout:active {
   transform: translateY(0);
 }
+
+.nav-icon {
+  width: 24px;
+  min-width: 24px;
+  height: 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+}
+
+.nav-icon i {
+  font-size: 18px;
+  line-height: 1;
+}
+
+
+/* BARRA SUPERIOR */
+.topbar {
+  position: relative;
+  z-index: 100;
+}
+
+.topbar-right {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.topbar-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* PERFIL */
+.profile-dropdown {
+  position: relative;
+}
+
+.profile-trigger {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 6px 10px;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  background: transparent;
+  cursor: pointer;
+  transition: background .2s, border-color .2s;
+}
+
+.profile-trigger:hover {
+  background: #f4f7fc;
+  border-color: #e6ebf3;
+}
+
+.topbar-avatar {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #4778e7, #b7a7f7);
+  color: white;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.profile-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+}
+
+.profile-info strong {
+  color: #1e293b;
+  font-size: 12px;
+}
+
+.profile-info small {
+  color: #8490a3;
+  font-size: 11px;
+}
+
+.profile-trigger > i {
+  color: #8490a3;
+  font-size: 13px;
+  margin-left: 5px;
+}
+
+/* MENÚ DESPLEGABLE */
+.profile-menu {
+  position: absolute;
+  top: calc(100% + 12px);
+  right: 0;
+  width: 215px;
+  padding: 9px;
+  background: white;
+  border: 1px solid #edf0f5;
+  border-radius: 12px;
+  box-shadow: 0 12px 35px rgba(20, 40, 80, .14);
+  animation: profileAppear .18s ease;
+  z-index: 1000;
+}
+
+.profile-menu a,
+.logout-option {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: #475569;
+  text-decoration: none;
+  font-size: 13px;
+  text-align: left;
+  cursor: pointer;
+  transition: background .2s;
+}
+
+.profile-menu a:hover {
+  background: #f1f5ff;
+  color: #3159c7;
+}
+
+.profile-menu i {
+  font-size: 17px;
+}
+
+.profile-divider {
+  height: 1px;
+  background: #edf0f5;
+  margin: 5px 0;
+}
+
+.profile-menu .logout-option {
+  color: #dc4c4c;
+}
+
+.profile-menu .logout-option:hover {
+  background: #fff1f1;
+}
+
+@keyframes profileAppear {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* RESPONSIVE */
+@media (max-width: 650px) {
+  .topbar-right {
+    gap: 8px;
+  }
+
+  .status {
+    display: none;
+  }
+
+  .profile-info {
+    display: none;
+  }
+
+  .profile-trigger {
+    gap: 4px;
+    padding: 5px;
+  }
+
+  .topbar-avatar {
+    width: 36px;
+    height: 36px;
+  }
+
+  .profile-menu {
+    width: 190px;
+  }
+}

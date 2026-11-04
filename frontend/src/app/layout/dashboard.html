@@ -1,5 +1,9 @@
+
 <div class="app-shell" [class.menu-collapsed]="menuCollapsed">
+
+  <!-- MENÚ LATERAL -->
   <aside class="sidebar">
+
     <a routerLink="/inicio" class="brand">
       <span class="brand-icon">G</span>
       <span>
@@ -11,90 +15,162 @@
     <div class="menu-label">MENÚ PRINCIPAL</div>
 
     <nav class="navigation">
+
       <a *ngIf="rol === 'ADMIN'"
         routerLink="/inicio"
         routerLinkActive="active"
         [routerLinkActiveOptions]="{ exact: true }">
-        <span class="nav-icon">⌂</span>
+        <span class="nav-icon"><i class="bi bi-house-door"></i></span>
         Inicio
       </a>
 
       <a *ngIf="rol === 'ADMIN'"
         routerLink="/alumnos"
         routerLinkActive="active">
-        <span class="nav-icon">♙</span>
+        <span class="nav-icon"><i class="bi bi-people"></i></span>
         Alumnos
       </a>
 
       <a routerLink="/cursos" routerLinkActive="active">
-        <span class="nav-icon">▤</span>
+        <span class="nav-icon"><i class="bi bi-journal-bookmark"></i></span>
         Cursos
       </a>
 
       <a *ngIf="rol === 'ADMIN'"
         routerLink="/docentes"
         routerLinkActive="active">
-        <span class="nav-icon">♧</span>
+        <span class="nav-icon"><i class="bi bi-person-workspace"></i></span>
         Docentes
       </a>
 
       <a *ngIf="rol === 'ADMIN'"
         routerLink="/matriculas"
         routerLinkActive="active">
-        <span class="nav-icon">▣</span>
+        <span class="nav-icon"><i class="bi bi-card-checklist"></i></span>
         Matrículas
+      </a>
+
+      <a *ngIf="rol === 'ADMIN'"
+        routerLink="/reporte-asistencia"
+        routerLinkActive="active">
+        <span class="nav-icon"><i class="bi bi-clipboard-data"></i></span>
+        Reporte de asistencia
       </a>
 
       <a *ngIf="rol === 'ADMIN'"
         routerLink="/cuentas"
         routerLinkActive="active">
-        <span class="nav-icon">🔐</span>
+        <span class="nav-icon"><i class="bi bi-person-lock"></i></span>
         Cuentas
       </a>
 
+      <a *ngIf="rol === 'ALUMNO'"
+        routerLink="/asistencia"
+        routerLinkActive="active">
+        <span class="nav-icon"><i class="bi bi-calendar-check"></i></span>
+        Mi Asistencia
+      </a>
+
+      <a *ngIf="rol === 'DOCENTE'"
+        routerLink="/registro-asistencia"
+        routerLinkActive="active">
+        <span class="nav-icon"><i class="bi bi-calendar2-check"></i></span>
+        Registrar asistencia
+      </a>
+
       <a routerLink="/mi-perfil" routerLinkActive="active">
-        <span class="nav-icon">♙</span>
+        <span class="nav-icon"><i class="bi bi-person-circle"></i></span>
         Mi perfil
       </a>
+
     </nav>
-
-    <div class="sidebar-footer">
-      <div class="profile-avatar">{{ iniciales }}</div>
-      <div>
-        <strong>{{ usuario }}</strong>
-        <small>{{ nombreRol }}</small>
-      </div>
-    </div>
-
-    <button type="button" class="btn-logout" (click)="cerrarSesion()">
-      Cerrar sesión
-    </button>
   </aside>
 
+  <!-- CONTENIDO PRINCIPAL -->
   <main class="main-area">
+
+    <!-- BARRA SUPERIOR -->
     <header class="topbar">
+
       <button
         class="menu-toggle"
         type="button"
         (click)="toggleMenu()"
         [attr.aria-expanded]="!menuCollapsed"
         aria-label="Contraer o expandir el menú">
-        ☰
+        <i class="bi bi-list"></i>
       </button>
 
-      <div>
+      <div class="topbar-info">
         <span class="topbar-label">PLATAFORMA ACADÉMICA</span>
         <strong>{{ nombreRol }}</strong>
       </div>
 
-      <div class="status">
-        <span class="status-dot"></span>
-        Sistema activo
+      <div class="topbar-right">
+
+        <div class="status">
+          <span class="status-dot"></span>
+          Sistema activo
+        </div>
+
+        <!-- PERFIL DESPLEGABLE -->
+        <div class="profile-dropdown">
+
+          <button
+            type="button"
+            class="profile-trigger"
+            (click)="togglePerfil()"
+            [attr.aria-expanded]="menuPerfilAbierto"
+            aria-label="Abrir menú de perfil">
+
+            <div class="topbar-avatar">
+              {{ iniciales }}
+            </div>
+
+            <div class="profile-info">
+              <strong>{{ usuario }}</strong>
+              <small>{{ nombreRol }}</small>
+            </div>
+
+            <i
+              class="bi"
+              [ngClass]="menuPerfilAbierto ? 'bi-chevron-up' : 'bi-chevron-down'">
+            </i>
+
+          </button>
+
+          <div class="profile-menu" *ngIf="menuPerfilAbierto">
+
+            <a
+              routerLink="/mi-perfil"
+              (click)="cerrarMenuPerfil()">
+              <i class="bi bi-person-circle"></i>
+              Mi perfil
+            </a>
+
+            <div class="profile-divider"></div>
+
+            <button
+              type="button"
+              class="logout-option"
+              (click)="cerrarSesion()">
+              <i class="bi bi-box-arrow-right"></i>
+              Cerrar sesión
+            </button>
+
+          </div>
+
+        </div>
+
       </div>
+
     </header>
 
+    <!-- PÁGINAS -->
     <section class="page-content">
       <router-outlet />
     </section>
+
   </main>
+
 </div>

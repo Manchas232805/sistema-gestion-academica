@@ -11,6 +11,7 @@ import { CommonModule } from '@angular/common';
 })
 export class Dashboard {
   menuCollapsed = false;
+  menuPerfilAbierto = false;
 
   usuario = sessionStorage.getItem('usuario') ?? '';
   rol = sessionStorage.getItem('rol') ?? '';
@@ -19,6 +20,13 @@ export class Dashboard {
 
   toggleMenu(): void {
     this.menuCollapsed = !this.menuCollapsed;
+  }
+  togglePerfil(): void {
+  this.menuPerfilAbierto = !this.menuPerfilAbierto;
+  }
+
+  cerrarMenuPerfil(): void {
+  this.menuPerfilAbierto = false;
   }
 
   cerrarSesion(): void {
